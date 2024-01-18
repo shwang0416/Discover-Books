@@ -1,16 +1,16 @@
+'use client';
+
 import ListItem from './ListItem';
 import { Book } from './types';
 
 export type ListProps = {
-  total: number;
   books: Book[];
   page: number;
 };
 
-const List = ({ total, books, page }: ListProps) => {
+const List = ({ books, page }: ListProps) => {
   return (
     <div className="">
-      <div className="">total : {total}</div>
       <div className="">page : {page}</div>
 
       {/* 무한스크롤 처리 */}

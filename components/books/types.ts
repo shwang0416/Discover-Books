@@ -5,3 +5,11 @@ export type Book = {
   image: string;
   url: string;
 };
+
+export type SearchResponse = {
+  total: number;
+  books: Book[];
+  page: number;
+};
+
+export type Operator = '|' | '-';
