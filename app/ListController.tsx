@@ -1,7 +1,7 @@
 'use client';
 
-import List from '@/components/books/List';
-import { Book, Operator } from '@/components/books/types';
+import List from '@/components/search/List';
+import { Book, Operator } from '@/components/search/types';
 import { useEffect, useState } from 'react';
 
 type ListControllerProps = {

@@ -1,8 +1,8 @@
-import EmptyList from '@/components/books/EmptyList';
-import List from '../components/books/List';
+import EmptyList from '@/components/search/EmptyList';
+import List from '../components/search/List';
 import ListController from './ListController';
 import getBooksAction from './serverActions/getBooksAction';
-import { Operator } from '@/components/books/types';
+import { Operator } from '@/components/search/types';
 import getAllBooksAction from './serverActions/getAllBooksAction';
 
 export const dynamic = 'force-dynamic';
