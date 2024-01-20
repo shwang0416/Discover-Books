@@ -1,12 +1,13 @@
-import { keywordParser } from './util';
+import { isLastPage, keywordParser } from './util';
 import getSearchAction from '@app/serverActions/getSearchAction';
 import getAllSearchAction from '@app/serverActions/getAllSearchAction';
 import { Book } from '@/components/search/types';
 import { NextRequest, NextResponse } from 'next/server';
 
-type GetSearchResponse = {
+export type GetSearchResponse = {
   books: Book[] | null;
-  page: number | null;
+  page: number;
+  isLastPage: boolean;
 };
 
 /**
@@ -30,7 +31,12 @@ export async function GET(request: NextRequest): Promise<
   const search = searchParams.get('search');
 
   if (!search) {
-    return NextResponse.json({ books: null, page: null });
+    return NextResponse.json({
+      books: null,
+      page: 0,
+      isLastPage: true,
+      total: 0,
+    });
   }
 
   const page = parseInt(searchParams.get('p') ?? '1');
@@ -44,14 +50,19 @@ export async function GET(request: NextRequest): Promise<
 
   // [operator 없는 검색]
   if (!keyword2 || !operator) {
-    const { books, page } = res1 as GetSearchResponse;
-    return NextResponse.json({ books, page });
+    const { books, total } = res1;
+    return NextResponse.json({
+      books,
+      page,
+      total,
+      isLastPage: isLastPage(total, books?.length as number, page),
+    });
   }
 
   const books1 = res1.books;
 
   if (operator === '|') {
-    const { books: books2 } = await getSearchAction({
+    const { books: books2, total } = await getSearchAction({
       keyword: keyword2,
       page,
     });
@@ -68,7 +79,13 @@ export async function GET(request: NextRequest): Promise<
       return matchingObject;
     }) as Book[];
 
-    return NextResponse.json({ books: mergedArray, page });
+    return NextResponse.json({
+      books: mergedArray,
+      page,
+      isLastPage:
+        isLastPage(res1.total, books1?.length as number, page) &&
+        isLastPage(total, books2?.length as number, page),
+    });
   } else {
     const books2 = await getAllSearchAction({
       keyword: keyword2,
@@ -78,6 +95,10 @@ export async function GET(request: NextRequest): Promise<
       (book) => !books2Ibsn13s.includes(book.isbn13),
     );
 
-    return NextResponse.json({ books: fillterdArray, page });
+    return NextResponse.json({
+      books: fillterdArray,
+      page,
+      isLastPage: isLastPage(res1.total, books1?.length as number, page),
+    });
   }
 }

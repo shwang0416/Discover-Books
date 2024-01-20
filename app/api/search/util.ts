@@ -29,3 +29,7 @@ export const keywordParser = (
     };
   }
 };
+
+export const isLastPage = (total: number, cur: number, page: number) => {
+  return (page - 1) * 10 + cur === total;
+};

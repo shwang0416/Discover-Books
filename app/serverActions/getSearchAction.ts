@@ -3,14 +3,15 @@
 import config from '@/config';
 import { Book } from './types';
 
-type getSearchActionProps = {
+type GetSearchActionProps = {
   keyword: string;
   page: number;
 };
 
-type GetSearchResponse = {
+type GetSearchActionResponse = {
   books: Book[];
-  page: number;
+  page: string;
+  total: number;
 };
 /**
  * Search books by title, author, ISBN or keywords
@@ -18,7 +19,7 @@ type GetSearchResponse = {
 const getSearchAction = async ({
   keyword,
   page = 1,
-}: getSearchActionProps): Promise<GetSearchResponse> => {
+}: GetSearchActionProps): Promise<GetSearchActionResponse> => {
   const res = await fetch(
     `${config.itBookStoreApiEndpoint}/search/${keyword}/${page}`,
   );
