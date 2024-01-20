@@ -1,8 +1,11 @@
 'use client';
 
-import EmptyList from '@components/search/EmptyList';
 import List from '@components/search/List';
-import { useEffect, useState } from 'react';
+import { Book } from './serverActions/types';
+import BeforeSearch from '@components/search/BeforeSearch';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
+import { useGetSearch } from './lib/react-query/useGetSearch';
+import { useMemo } from 'react';
 
 /**
  * 기존 page를 클라이언트 컴포넌트로 변경
@@ -14,19 +17,42 @@ import { useEffect, useState } from 'react';
 
  *  -> books 계산 로직까지 route handler+서버가 담당하게 하고, 서버캐시+무한스크롤을 react-query에게 맡기자
  */
-const Page = ({ searchParams }: { searchParams: any }) => {
-  const [books, setBooks] = useState(null);
-  useEffect(() => {
-    const asyncFunc = async () => {
-      const res = await fetch(`/api/search/${window.location.search}`);
-      const result = await res.json();
-      setBooks(result.books);
-      // console.log(result.books);
-    };
-    asyncFunc();
-  }, [searchParams]);
 
-  if (!books) return <EmptyList />;
-  return <List books={books} />;
+const Page = ({
+  searchParams: { search },
+}: {
+  searchParams: { search: string };
+}) => {
+  const { data, isError, hasNextPage, isFetching, isPending, fetchNextPage } =
+    useGetSearch(search);
+
+  const ref = useIntersectionObserver({
+    onIntersect: async (entry, observer) => {
+      observer.unobserve(entry.target);
+      if (hasNextPage && !isFetching) {
+        fetchNextPage();
+      }
+    },
+  });
+
+  const books = useMemo(
+    () => (data ? data.pages.flatMap(({ books }) => books) : []),
+    [data],
+  );
+
+  if (!search) return <BeforeSearch />;
+
+  if (isPending) return <div className="">loading ... </div>;
+
+  if (!data || isError) throw new Error('search 데이터를 가져오는데 실패함');
+
+  return (
+    <>
+      <List books={books as Book[]} />
+      <div className="h-20 bg-pink-300" ref={ref}>
+        Target
+      </div>
+    </>
+  );
 };
 export default Page;

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import './globals.css';
 import Loading from './loading';
 import SearchBarController from './SearchBarController';
+import Provider from './lib/react-query/Provider';
 
 export const metadata = {
   title: 'Next.js',
@@ -16,14 +17,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="flex h-full w-full flex-col bg-sky-200">
-          <Suspense fallback={<Loading />}>
-            <SearchBarController />
-          </Suspense>
-          <div className="h-full flex-grow">
-            <Suspense fallback={<Loading />}>{children}</Suspense>
+        <Provider>
+          <div className="flex h-full w-full flex-col bg-sky-200">
+            <Suspense fallback={<Loading />}>
+              <SearchBarController />
+            </Suspense>
+            <div className="h-full flex-grow">
+              <Suspense fallback={<Loading />}>{children}</Suspense>
+            </div>
           </div>
-        </div>
+        </Provider>
       </body>
     </html>
   );
