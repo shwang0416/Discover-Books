@@ -1,12 +1,24 @@
 'use server';
 
 import config from '@/config';
+import { Book } from './types';
 
 type getSearchActionProps = {
   keyword: string;
   page: number;
 };
-const getSearchAction = async ({ keyword, page = 1 }: getSearchActionProps) => {
+
+type GetSearchResponse = {
+  books: Book[];
+  page: number;
+};
+/**
+ * Search books by title, author, ISBN or keywords
+ */
+const getSearchAction = async ({
+  keyword,
+  page = 1,
+}: getSearchActionProps): Promise<GetSearchResponse> => {
   const res = await fetch(
     `${config.itBookStoreApiEndpoint}/search/${keyword}/${page}`,
   );
