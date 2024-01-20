@@ -34,7 +34,7 @@ const getAllSearchAction = async ({ keyword }: getAllSearchActionProps) => {
     for (const url of urls) {
       const response = await fetch(url);
       const data: SearchResponse = await response.json();
-      allBooks.push(data.books);
+      allBooks.push(...data.books);
     }
   } catch (error) {
     throw new Error('ERROR: getAllSearchAction failed 2');
