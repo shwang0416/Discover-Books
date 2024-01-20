@@ -2,11 +2,11 @@
 
 import config from '@/config';
 
-type getBooksActionProps = {
+type getSearchActionProps = {
   keyword: string;
   page: number;
 };
-const getBooksAction = async ({ keyword, page = 1 }: getBooksActionProps) => {
+const getSearchAction = async ({ keyword, page = 1 }: getSearchActionProps) => {
   const res = await fetch(
     `${config.itBookStoreApiEndpoint}/search/${keyword}/${page}`,
   );
@@ -14,10 +14,10 @@ const getBooksAction = async ({ keyword, page = 1 }: getBooksActionProps) => {
   if (res.status !== 200) {
     console.log(res);
 
-    throw new Error('ERROR: getBooksAction failed');
+    throw new Error('ERROR: getSearchAction failed');
   }
 
   return res.json();
 };
 
-export default getBooksAction;
+export default getSearchAction;

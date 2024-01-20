@@ -1,9 +1,9 @@
 import EmptyList from '@/components/search/EmptyList';
 import List from '../components/search/List';
 import ListController from './ListController';
-import getBooksAction from './serverActions/getBooksAction';
+import getSearchAction from './serverActions/getSearchAction';
 import { Operator } from '@/components/search/types';
-import getAllBooksAction from './serverActions/getAllBooksAction';
+import getAllSearchAction from './serverActions/getAllSearchAction';
 
 export const dynamic = 'force-dynamic';
 
@@ -45,7 +45,7 @@ const Page = async ({
   if (!search) return <EmptyList />;
 
   const { keyword1, keyword2, operator } = keywordParser(search);
-  const res1 = await getBooksAction({
+  const res1 = await getSearchAction({
     keyword: keyword1,
     page: p,
   });
@@ -58,7 +58,7 @@ const Page = async ({
   let res2Books;
 
   if (operator === '|') {
-    const { books } = await getBooksAction({
+    const { books } = await getSearchAction({
       keyword: keyword2,
       page: p,
     });
@@ -66,7 +66,7 @@ const Page = async ({
   }
   // FIXME: 만약 연산자 "-"라면 total개수 모두 가져와야함 => getAllBooksAction
   else {
-    res2Books = await getAllBooksAction({
+    res2Books = await getAllSearchAction({
       keyword: keyword2,
     });
   }

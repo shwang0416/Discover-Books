@@ -4,17 +4,17 @@ import { SearchResponse } from './types';
 
 import config from '@/config';
 
-type getAllBooksActionProps = {
+type getAllSearchActionProps = {
   keyword: string;
 };
 
-const getAllBooksAction = async ({ keyword }: getAllBooksActionProps) => {
+const getAllSearchAction = async ({ keyword }: getAllSearchActionProps) => {
   const allBooks = [];
   const url = `${config.itBookStoreApiEndpoint}/search/${keyword}`;
   const firstRes = await fetch(url);
 
   if (firstRes.status !== 200) {
-    throw new Error('ERROR: getAllBooksAction failed 1');
+    throw new Error('ERROR: getAllSearchAction failed 1');
   }
 
   const firstData: SearchResponse = await firstRes.json();
@@ -37,9 +37,9 @@ const getAllBooksAction = async ({ keyword }: getAllBooksActionProps) => {
       allBooks.push(data.books);
     }
   } catch (error) {
-    throw new Error('ERROR: getAllBooksAction failed 2');
+    throw new Error('ERROR: getAllSearchAction failed 2');
   }
   return allBooks;
 };
 
-export default getAllBooksAction;
+export default getAllSearchAction;
