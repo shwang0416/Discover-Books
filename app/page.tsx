@@ -3,6 +3,7 @@ import List from '../components/books/List';
 import ListController from './ListController';
 import getBooksAction from './serverActions/getBooksAction';
 import { Operator } from '@/components/books/types';
+import getAllBooksAction from './serverActions/getAllBooksAction';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,11 +55,21 @@ const Page = async ({
     return <List books={books} page={page} />;
   }
 
+  let res2Books;
+
+  if (operator === '|') {
+    const { books } = await getBooksAction({
+      keyword: keyword2,
+      page: p,
+    });
+    res2Books = [...books];
+  }
   // FIXME: 만약 연산자 "-"라면 total개수 모두 가져와야함 => getAllBooksAction
-  const res2 = await getBooksAction({
-    keyword: keyword2,
-    page: p,
-  });
+  else {
+    res2Books = await getAllBooksAction({
+      keyword: keyword2,
+    });
+  }
 
   // loading UI 확인 용
   // await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -68,7 +79,7 @@ const Page = async ({
       operator={operator}
       page={1}
       books1={res1.books}
-      books2={res2.books}
+      books2={res2Books}
     />
   );
 };

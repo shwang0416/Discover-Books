@@ -1,3 +1,9 @@
+export type SearchResponse = {
+  total: number;
+  books: Book[];
+  page: number;
+};
+
 export type Book = {
   isbn13: string;
   title: string;
@@ -5,5 +11,3 @@ export type Book = {
   image: string;
   url: string;
 };
-
-export type Operator = '|' | '-';

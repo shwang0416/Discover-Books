@@ -39,7 +39,7 @@ const ListController = ({
       );
       setMergedBooks(fillterdArray);
     }
-  }, [books1, books2]);
+  }, [books1, books2, operator]);
 
   //   useEffect(() => {
   //     console.log(books1);
