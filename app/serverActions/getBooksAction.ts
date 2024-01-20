@@ -1,13 +1,15 @@
 'use server';
 
-const API_ENDPOINT = 'https://api.itbook.store/1.0';
+import config from '@/config';
 
 type getBooksActionProps = {
   keyword: string;
   page: number;
 };
 const getBooksAction = async ({ keyword, page = 1 }: getBooksActionProps) => {
-  const res = await fetch(`${API_ENDPOINT}/search/${keyword}/${page}`);
+  const res = await fetch(
+    `${config.itBookStoreApiEndpoint}/search/${keyword}/${page}`,
+  );
 
   if (res.status !== 200) {
     console.log(res);

@@ -2,7 +2,7 @@
 
 import { SearchResponse } from './types';
 
-const API_ENDPOINT = 'https://api.itbook.store/1.0';
+import config from '@/config';
 
 type getAllBooksActionProps = {
   keyword: string;
@@ -10,7 +10,7 @@ type getAllBooksActionProps = {
 
 const getAllBooksAction = async ({ keyword }: getAllBooksActionProps) => {
   const allBooks = [];
-  const url = `${API_ENDPOINT}/search/${keyword}`;
+  const url = `${config.itBookStoreApiEndpoint}/search/${keyword}`;
   const firstRes = await fetch(url);
 
   if (firstRes.status !== 200) {
