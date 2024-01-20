@@ -21,6 +21,7 @@ const List = ({ books, page }: ListProps) => {
             subtitle={subtitle}
             image={image}
             url={url}
+            isbn13={isbn13}
             key={isbn13}
           />
         ))}
