@@ -5,15 +5,11 @@ import { Book } from './types';
 
 export type ListProps = {
   books: Book[];
-  page: number;
 };
 
-const List = ({ books, page }: ListProps) => {
+const List = ({ books }: ListProps) => {
   return (
     <div className="">
-      <div className="">page : {page}</div>
-
-      {/* 무한스크롤 처리 */}
       <div className="">
         {books.map(({ title, subtitle, image, url, isbn13 }) => (
           <ListItem

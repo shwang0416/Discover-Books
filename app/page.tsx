@@ -1,87 +1,32 @@
-import EmptyList from '@/components/search/EmptyList';
-import List from '../components/search/List';
-import ListController from './ListController';
-import getSearchAction from './serverActions/getSearchAction';
-import { Operator } from '@/components/search/types';
-import getAllSearchAction from './serverActions/getAllSearchAction';
+'use client';
 
-export const dynamic = 'force-dynamic';
+import EmptyList from '@components/search/EmptyList';
+import List from '@components/search/List';
+import { useEffect, useState } from 'react';
 
-const keywordParser = (
-  search: string,
-): {
-  keyword1: string;
-  keyword2: string | null;
-  operator: Operator | null;
-} => {
-  if (search.includes('|')) {
-    const [keyword1, keyword2] = search.split('|', 2);
-    return {
-      keyword1,
-      keyword2,
-      operator: '|',
+/**
+ * 기존 page를 클라이언트 컴포넌트로 변경
+ *
+ * <이유>
+    가져온 책 데이터를 클라이언트 사이드에서 잘 보존하고있어야하는데 
+    Listcontroller가 다시 마운트되면서 들고있던 state가 날아감
+    클라이언트 사이드에서 데이터를 가져온 뒤 
+
+ *  -> books 계산 로직까지 route handler+서버가 담당하게 하고, 서버캐시+무한스크롤을 react-query에게 맡기자
+ */
+const Page = ({ searchParams }: { searchParams: any }) => {
+  const [books, setBooks] = useState(null);
+  useEffect(() => {
+    const asyncFunc = async () => {
+      const res = await fetch(`/api/search/${window.location.search}`);
+      const result = await res.json();
+      setBooks(result.books);
+      // console.log(result.books);
     };
-  } else if (search.includes('-')) {
-    const [keyword1, keyword2] = search.split('-', 2);
-    return {
-      keyword1,
-      keyword2,
-      operator: '-',
-    };
-  } else {
-    return {
-      keyword1: search,
-      keyword2: null,
-      operator: null,
-    };
-  }
+    asyncFunc();
+  }, [searchParams]);
+
+  if (!books) return <EmptyList />;
+  return <List books={books} />;
 };
-
-const Page = async ({
-  searchParams: { search, p },
-}: {
-  searchParams: { search: string; p: number };
-}) => {
-  if (!search) return <EmptyList />;
-
-  const { keyword1, keyword2, operator } = keywordParser(search);
-  const res1 = await getSearchAction({
-    keyword: keyword1,
-    page: p,
-  });
-
-  if (!keyword2 || !operator) {
-    const { books, page } = res1;
-    return <List books={books} page={page} />;
-  }
-
-  let res2Books;
-
-  if (operator === '|') {
-    const { books } = await getSearchAction({
-      keyword: keyword2,
-      page: p,
-    });
-    res2Books = [...books];
-  }
-  // FIXME: 만약 연산자 "-"라면 total개수 모두 가져와야함 => getAllBooksAction
-  else {
-    res2Books = await getAllSearchAction({
-      keyword: keyword2,
-    });
-  }
-
-  // loading UI 확인 용
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
-
-  return (
-    <ListController
-      operator={operator}
-      page={1}
-      books1={res1.books}
-      books2={res2Books}
-    />
-  );
-};
-
 export default Page;
