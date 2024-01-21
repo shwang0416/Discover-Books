@@ -5,12 +5,12 @@ const FormButton = ({ text = 'Submit' }: { text: string }) => {
 
   return (
     <button
-      className=""
+      className="w-20 rounded-md bg-slate-400"
       type="submit"
       aria-disabled={pending}
       disabled={pending}
     >
-      {pending ? 'Please wait...' : text}
+      {pending ? 'wait...' : text}
     </button>
   );
 };

@@ -10,10 +10,14 @@ type SearchBarProps = {
 const SearchBar = ({ onSubmit }: SearchBarProps) => {
   return (
     <div className="">
-      <form action={onSubmit} className="">
-        <input id="search" name="search" type="text" className="" />
+      <form action={onSubmit} className="flex flex-row gap-x-2">
+        <input
+          id="search"
+          name="search"
+          type="text"
+          className="h-10 rounded-md bg-slate-100 px-2 focus:outline-none focus:ring-0"
+        />
         <FormButton text={'Search'} />
-        <FormLoading />
       </form>
     </div>
   );
