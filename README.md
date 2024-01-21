@@ -8,12 +8,11 @@ Next.js 13^버전 프로젝트로 server action, tanstack-query(v5)를 사용하
 - 도서 리스트 무한 스크롤
 - 리스트 검색 시 or(|) & not(-) 연산 포함
 
-https://github.com/shwang0416/Discover-Books/assets/72377329/605daba8-9bd2-42eb-b7f0-d23cb672bd6d
-https://github.com/shwang0416/Discover-Books/assets/72377329/c51e9908-f027-452d-b3eb-caf2755d373a
-
-
+![discover-books1 (1)](https://github.com/shwang0416/Discover-Books/assets/72377329/0f8c20fe-04d0-4f56-bb6d-6d971340437f){: width="700px" height="auto"}
+![not operator](https://github.com/shwang0416/Discover-Books/assets/72377329/8cdd2320-c0f4-40ce-bb53-038b3c62f77f){: width="700px" height="auto"}
 
 ## 시작하기
+
 
 ```bash
 npm run dev
