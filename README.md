@@ -1,8 +1,19 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Discover-Books
+Next.js 13^버전 프로젝트로 server action, tanstack-query(v5)를 사용하는 기술 실습 프로젝트로,
+[itbook.store](https://itbook.store)의 책을 검색하고 상세 정보를 확인할 수 있는 도서 검색 페이지입니다.
 
-## Getting Started
 
-First, run the development server:
+## 주요 기능
+- 도서 리스트 페이지, 클릭시 상세 정보 페이지
+- 도서 리스트 무한 스크롤
+- 리스트 검색 시 or(|) & not(-) 연산 포함
+
+https://github.com/shwang0416/Discover-Books/assets/72377329/605daba8-9bd2-42eb-b7f0-d23cb672bd6d
+https://github.com/shwang0416/Discover-Books/assets/72377329/c51e9908-f027-452d-b3eb-caf2755d373a
+
+
+
+## 시작하기
 
 ```bash
 npm run dev
@@ -20,17 +31,3 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
