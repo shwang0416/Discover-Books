@@ -1,6 +1,5 @@
 import { isLastPage, keywordParser } from './util';
 import getSearchAction from '@app/serverActions/getSearchAction';
-import getAllSearchAction from '@app/serverActions/getAllSearchAction';
 import { Book } from '@/components/search/types';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -19,7 +18,7 @@ export type GetSearchResponse = {
  *
  * - 검색어를 파싱했을 때 operator("|" or "-")가 없으면 단일 검색 리턴
  * - 검색어를 파싱했을 때 operator가 "|"면 검색어 A와 B의 페이지 p를 가져온 뒤 합집합 리턴
- * - 검색어를 파싱했을 때 operator가 "-"면 검색어 A의 페이지p 와 B의 리스트 전체(total)를 가져와 A-B한 차집합 리턴
+ * - 검색어를 파싱했을 때 operator가 "-"면 검색어 A의 페이지p에서 제목에 b를 포함하는 (대소문자 구분X) 결과를 제외한 배열 리턴
  */
 export async function GET(request: NextRequest): Promise<
   | NextResponse<{
@@ -61,12 +60,12 @@ export async function GET(request: NextRequest): Promise<
 
   const books1 = res1.books;
 
-  if (operator === '|') {
-    const { books: books2, total } = await getSearchAction({
-      keyword: keyword2,
-      page,
-    });
+  const { books: books2, total } = await getSearchAction({
+    keyword: keyword2,
+    page,
+  });
 
+  if (operator === '|') {
     const mergedSet = new Set(
       [...books1, ...books2].map((item) => item.isbn13),
     );
@@ -87,12 +86,9 @@ export async function GET(request: NextRequest): Promise<
         isLastPage(total, books2?.length as number, page),
     });
   } else {
-    const books2 = await getAllSearchAction({
-      keyword: keyword2,
-    });
-    const books2Ibsn13s = books2.map((book) => book.isbn13);
+    // operator === '-'
     const fillterdArray = books1.filter(
-      (book) => !books2Ibsn13s.includes(book.isbn13),
+      (book) => !book.title.toUpperCase().includes(keyword2.toUpperCase()),
     );
 
     return NextResponse.json({
